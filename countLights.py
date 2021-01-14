@@ -48,4 +48,27 @@ def countLights():
 		elif lightType == lightList[5]:
 			lightCount[5] += 1
 
-	print lightCount
+	return lightCount
+
+def ui (): 
+	print "this is the ui"
+
+	lightCount = countLights(); 
+
+	win = 'LightAssistant'
+	if (cmds.window (win, exists = 1)):
+	    cmds.deleteUI (win)
+	cmds.window (win, rtf = 1, w = 280, h = 280, t = win, s = 1)
+	#cmds.columnLayout (adj = 1)
+	cmds.gridLayout( numberOfColumns= 2, cellWidthHeight=(50, 50), cw = 120 )
+
+
+	cmds.text('Directional Lights: '  + str(lightCount[0]) , al = 'left')
+	cmds.button('Disable')
+	#cmds.text('Point Lights: '  + str(lightCount[1]) , al = 'left')
+	#cmds.text('Spot Lights: '  + str(lightCount[2]) , al = 'left')
+	#cmds.text('Ambient Lights: '  + str(lightCount[3]) , al = 'left')
+	#cmds.text('Area Lights: '  + str(lightCount[4]) , al = 'left')
+	#cmds.text('Volume Lights: '  + str(lightCount[5]) , al = 'left')
+
+	cmds.showWindow (win)
