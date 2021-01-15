@@ -15,17 +15,20 @@ import sys
 # Loop through items in a scene, and if any of those 5, add to the count. 
  	# Sort by type name
 
-def countLights(): 
+lightList = ['directionalLight', 'pointLight', 'spotLight', 'ambientLight', 'areaLight', 'volumeLight']
+lights = cmds.ls(lights = True)
 
-	lightList[] = ['directionalLight', 'pointLight', 'spotLight', 'ambientLight', 'areaLight', 'volumeLight']
+
+def countLights (): 
+
+	lightCount = [0] * 6
+
+	
 	print "this works"
-
-	objects = cmds.ls()	
 
 	# Get all light objects in the scene 
 	lights = cmds.ls(lights = True)
 
-	# For all the objects in the directory, we are going to list the number of each light
 	for light in  lights: 
 		
 		lightType = cmds.nodeType(light)
@@ -50,6 +53,20 @@ def countLights():
 
 	return lightCount
 
+def disablePressed ():
+	print "pressed" 
+
+	print lights
+	for light in lights: 
+
+		lightType = cmds.nodeType(light)
+
+		if lightType == lightList[0]:
+			lightName = light.split('Shape')
+			lightResult = lightName[0] + lightName[1]
+			cmds.setAttr(lightResult + '.visibility', 0)
+
+
 def ui (): 
 	print "this is the ui"
 
@@ -59,16 +76,21 @@ def ui ():
 	if (cmds.window (win, exists = 1)):
 	    cmds.deleteUI (win)
 	cmds.window (win, rtf = 1, w = 280, h = 280, t = win, s = 1)
-	#cmds.columnLayout (adj = 1)
-	cmds.gridLayout( numberOfColumns= 2, cellWidthHeight=(50, 50), cw = 120 )
+	cmds.columnLayout (adj = 1)
+	cmds.text('Light Types', fn = 'boldLabelFont')
+	cmds.text('\n')
 
+	cmds.gridLayout( numberOfColumns= 2, cellWidthHeight=(25, 25), cw = 120, aec = 1)
 
-	cmds.text('Directional Lights: '  + str(lightCount[0]) , al = 'left')
-	cmds.button('Disable')
-	#cmds.text('Point Lights: '  + str(lightCount[1]) , al = 'left')
-	#cmds.text('Spot Lights: '  + str(lightCount[2]) , al = 'left')
-	#cmds.text('Ambient Lights: '  + str(lightCount[3]) , al = 'left')
-	#cmds.text('Area Lights: '  + str(lightCount[4]) , al = 'left')
-	#cmds.text('Volume Lights: '  + str(lightCount[5]) , al = 'left')
+	print lightList
+	print lightCount
+
+	i = 0
+
+	for light in lightCount: 
+		label = cmds.text(' ' + str(light) + ' ' + lightList[i] + 's', al = 'left', fn = 'boldLabelFont')
+		label2 = cmds.button('Disable Lights', c = lambda x: disablePressed())
+
+		i += 1
 
 	cmds.showWindow (win)
