@@ -15,6 +15,7 @@ import sys
 # Loop through items in a scene, and if any of those 5, add to the count. 
  	# Sort by type name
 
+# Global scope
 lightList = ['directionalLight', 'pointLight', 'spotLight', 'ambientLight', 'areaLight', 'volumeLight']
 lights = cmds.ls(lights = True)
 
@@ -66,7 +67,33 @@ def disablePressed ():
 			lightResult = lightName[0] + lightName[1]
 			cmds.setAttr(lightResult + '.visibility', 0)
 
+	
+def getLightType(): 
+	for light in  lights: 
+		
+		lightType = cmds.nodeType(light)
 
+		if lightType == lightList[0]:
+			lightType = lightList[0]
+
+		elif lightType == lightList[1]:
+			lightType = lightList[0]
+
+		elif lightType == lightList[2]:
+			lightType = lightList[0]
+
+		elif lightType == lightList[3]:
+			lightType = lightList[0]
+
+		elif lightType == lightList[4]:
+			lightType = lightList[0]
+
+		elif lightType == lightList[5]:
+			lightType = lightList[0]
+
+	return lightType
+
+	
 def ui (): 
 	print "this is the ui"
 
@@ -77,10 +104,14 @@ def ui ():
 	    cmds.deleteUI (win)
 	cmds.window (win, rtf = 1, w = 280, h = 280, t = win, s = 1)
 	cmds.columnLayout (adj = 1)
-	cmds.text('Light Types', fn = 'boldLabelFont')
+	cmds.text('Light Assistant', fn = 'boldLabelFont')
 	cmds.text('\n')
 
-	cmds.gridLayout( numberOfColumns= 2, cellWidthHeight=(25, 25), cw = 120, aec = 1)
+	cmds.gridLayout( numberOfColumns= 3, cellWidthHeight=(25, 25), cw = 140, aec = 1)
+
+	cmds.text('Light Type', al = 'center', fn = 'boldLabelFont')
+	cmds.text('Number in Scene', al = 'center', fn = 'boldLabelFont')
+	cmds.text(' \tEnable', al = 'left', fn = 'boldLabelFont')
 
 	print lightList
 	print lightCount
@@ -88,8 +119,12 @@ def ui ():
 	i = 0
 
 	for light in lightCount: 
-		label = cmds.text(' ' + str(light) + ' ' + lightList[i] + 's', al = 'left', fn = 'boldLabelFont')
-		label2 = cmds.button('Disable Lights', c = lambda x: disablePressed())
+		lightType = cmds.text(lightList[i], al = 'center')
+		lightCount = cmds.text(' ' + str(light), al = 'center', fn = 'boldLabelFont')
+		#label2 = cmds.button('Disable Lights', c = lambda x: disablePressed())
+
+		switch = cmds.radioButtonGrp(labelArray2 = ['On', 'Off'], numberOfRadioButtons = 2, cw2 = [60,10], 
+			cal = [1, "right"])
 
 		i += 1
 
