@@ -17,7 +17,9 @@ import sys
 
 # Global scope
 lightList = ['directionalLight', 'pointLight', 'spotLight', 'ambientLight', 'areaLight', 'volumeLight']
+lightTable ={'directionalLight' : '1' , 'pointLight': '1' , 'spotLight': '1', 'ambientLight' : '1', 'areaLight' : '1', 'volumeLight' : '1'}
 lights = cmds.ls(lights = True)
+
 
 
 def countLights (): 
@@ -54,46 +56,42 @@ def countLights ():
 
 	return lightCount
 
-def disablePressed ():
+def offTog ():
 	print "pressed" 
-
-	print lights
+	
 	for light in lights: 
 
+		# Get light type circling through lights 
 		lightType = cmds.nodeType(light)
 
 		if lightType == lightList[0]:
 			lightName = light.split('Shape')
 			lightResult = lightName[0] + lightName[1]
+
 			cmds.setAttr(lightResult + '.visibility', 0)
 
+
+	lightTable.update({'directionalLight' : '0'})
+	print lightTable
+
+def onTog ():
+	print "pressed" 
 	
-def getLightType(): 
-	for light in  lights: 
-		
+	for light in lights: 
+
+		# Get light type circling through lights 
 		lightType = cmds.nodeType(light)
 
 		if lightType == lightList[0]:
-			lightType = lightList[0]
+			lightName = light.split('Shape')
+			lightResult = lightName[0] + lightName[1]
 
-		elif lightType == lightList[1]:
-			lightType = lightList[0]
+			cmds.setAttr(lightResult + '.visibility', 1)
 
-		elif lightType == lightList[2]:
-			lightType = lightList[0]
 
-		elif lightType == lightList[3]:
-			lightType = lightList[0]
+	lightTable.update({'directionalLight' : '1'})
+	print lightTable
 
-		elif lightType == lightList[4]:
-			lightType = lightList[0]
-
-		elif lightType == lightList[5]:
-			lightType = lightList[0]
-
-	return lightType
-
-	
 def ui (): 
 	print "this is the ui"
 
@@ -111,7 +109,7 @@ def ui ():
 
 	cmds.text('Light Type', al = 'center', fn = 'boldLabelFont')
 	cmds.text('Number in Scene', al = 'center', fn = 'boldLabelFont')
-	cmds.text(' \tEnable', al = 'left', fn = 'boldLabelFont')
+	cmds.text('Visbility for All', al = 'center', fn = 'boldLabelFont')
 
 	print lightList
 	print lightCount
@@ -124,7 +122,7 @@ def ui ():
 		#label2 = cmds.button('Disable Lights', c = lambda x: disablePressed())
 
 		switch = cmds.radioButtonGrp(labelArray2 = ['On', 'Off'], numberOfRadioButtons = 2, cw2 = [60,10], 
-			cal = [1, "right"])
+			cal = [2, "right"], ad2 = 1, sl = 1, on2 = lambda x: offTog(), on1 = lambda x: onTog())
 
 		i += 1
 
