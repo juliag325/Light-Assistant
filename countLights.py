@@ -68,11 +68,9 @@ def offTog (number):
 		if lightList[number] == lightType: 
 			lightName = light.split('Shape')
 			lightResult = lightName[0] + lightName[1]
-
 			cmds.setAttr(lightResult + '.visibility', 0)
 
-
-	#lightTable.update({'directionalLight' : '0'})
+	lightTable.update({'directionalLight' : '0'})
 	
 
 def onTog ():
@@ -82,15 +80,13 @@ def onTog ():
 		# Get light type circling through lights 
 		lightType = cmds.nodeType(light)
 
-		if lightType == lightList[0]:
+		if lightList[number] == lightType:
 			lightName = light.split('Shape')
 			lightResult = lightName[0] + lightName[1]
-
 			cmds.setAttr(lightResult + '.visibility', 1)
 
-
 	lightTable.update({'directionalLight' : '1'})
-	print lightTable
+
 
 def ui (): 
 
@@ -101,6 +97,7 @@ def ui ():
 	win = 'LightAssistant'
 	if (cmds.window (win, exists = 1)):
 	    cmds.deleteUI (win)
+	    
 	cmds.window (win, rtf = 1, w = 280, h = 280, t = win, s = 1)
 	cmds.columnLayout (adj = 1)
 	cmds.text('Light Assistant', fn = 'boldLabelFont')
@@ -117,13 +114,10 @@ def ui ():
 	for light in lightCount: 
 		lightType = cmds.text(lightList[i], al = 'center')
 		lightCount = cmds.text(' ' + str(light), al = 'center', fn = 'boldLabelFont')
-		#label2 = cmds.button('Disable Lights', c = lambda x: disablePressed())
-
 
 		#switch = cmds.radioButtonGrp(labelArray2 = ['On', 'Off'], numberOfRadioButtons = 2, cw2 = [60,10], 
 			#cal = [2, "right"], ad2 = 1, sl = 1, on2 = lambda x: offTog(buttonList[i-1]), on1 = lambda x: onTog())
 
-		# r0
 		buttonList.append("r{0}".format(i))
 		buttonList[i] = createRadioButton(i)
 
@@ -133,10 +127,9 @@ def ui ():
 	cmds.showWindow (win)
 
 def createRadioButton(number): 
+
 	# Create list of radio buttons 
-	
-	rButton = cmds.radioButtonGrp(labelArray2 = ['On', 'Off'], numberOfRadioButtons = 2, cw2 = [60,10], 
+	radioButton = cmds.radioButtonGrp(labelArray2 = ['On', 'Off'], numberOfRadioButtons = 2, cw2 = [60,10], 
 		cal = [2, "right"], ad2 = 1, sl = 1, on2 = lambda x: offTog(number), on1 = lambda x: onTog())
 
-	return rButton
-	
+	return radioButton;
