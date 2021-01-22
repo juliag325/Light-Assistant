@@ -21,13 +21,10 @@ lightTable ={'directionalLight' : '1' , 'pointLight': '1' , 'spotLight': '1', 'a
 lights = cmds.ls(lights = True)
 
 
-
+# Count the number of lights by type in the scene
 def countLights (): 
 
 	lightCount = [0] * 6
-
-	
-	print "this works"
 
 	# Get all light objects in the scene 
 	lights = cmds.ls(lights = True)
@@ -56,13 +53,11 @@ def countLights ():
 
 	return lightCount
 
+# Off toggle radio button
 def offTog (number):
-
-	print number
 
 	for light in lights: 
 
-		# Get light type circling through lights 
 		lightType = cmds.nodeType(light)
 
 		if lightList[number] == lightType: 
@@ -73,11 +68,11 @@ def offTog (number):
 	lightTable.update({'directionalLight' : '0'})
 	
 
-def onTog ():
+# On toggle radio button
+def onTog (number):
 	
 	for light in lights: 
 
-		# Get light type circling through lights 
 		lightType = cmds.nodeType(light)
 
 		if lightList[number] == lightType:
@@ -88,6 +83,7 @@ def onTog ():
 	lightTable.update({'directionalLight' : '1'})
 
 
+# Window UI
 def ui (): 
 
 	buttonList = []
@@ -97,7 +93,7 @@ def ui ():
 	win = 'LightAssistant'
 	if (cmds.window (win, exists = 1)):
 	    cmds.deleteUI (win)
-	    
+
 	cmds.window (win, rtf = 1, w = 280, h = 280, t = win, s = 1)
 	cmds.columnLayout (adj = 1)
 	cmds.text('Light Assistant', fn = 'boldLabelFont')
@@ -123,13 +119,14 @@ def ui ():
 
 		i += 1
 
-	print buttonList
 	cmds.showWindow (win)
 
+
+# Create corresponding radio buttons
 def createRadioButton(number): 
+	
+	rButton = cmds.radioButtonGrp(labelArray2 = ['On', 'Off'], numberOfRadioButtons = 2, cw2 = [60,10], 
+		cal = [2, "right"], ad2 = 1, sl = 1, on2 = lambda x: offTog(number), on1 = lambda x: onTog(number))
 
-	# Create list of radio buttons 
-	radioButton = cmds.radioButtonGrp(labelArray2 = ['On', 'Off'], numberOfRadioButtons = 2, cw2 = [60,10], 
-		cal = [2, "right"], ad2 = 1, sl = 1, on2 = lambda x: offTog(number), on1 = lambda x: onTog())
-
-	return radioButton;
+	return rButton
+	
